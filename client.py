@@ -5,11 +5,6 @@ def tampilkan_menu():
     print("Pilih perintah:")
     print("1. Registrasi Pasien")
     print("2. Informasi Antrean")
-    print("3. Nomor Antrean")
-    print("4. Tampil Informasi Antrean")
-    print("6. Panggil Pasien")
-    print("7. Pembaruan Antrean dan Database")
-    print("8. Rekam Medis Diperbarui")
     print("9. Keluar")
 
 # Fungsi Untuk menampilkan daftar klinik
@@ -52,7 +47,7 @@ def registrasi_pasien(server):
 def cek_nomor_antrean_client(server):
     # Meminta input klinik dan nomor rekam medis
     daftar_klinik = menampilkan_daftar_klinik(server)
-    klinik_dipilih = input(f"Pilih klinik [1-{len(daftar_klinik)}]")
+    klinik_dipilih = input(f"Pilih klinik [1-{len(daftar_klinik)}]:")
     nomor_rekam_medis = input("Masukkan nomor rekam medis: ")
     nama_klinik_dipilih = daftar_klinik[int(klinik_dipilih) - 1]
     
