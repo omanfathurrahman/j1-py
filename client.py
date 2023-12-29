@@ -4,7 +4,8 @@ import xmlrpc.client
 def tampilkan_menu():
     print("Pilih perintah:")
     print("1. Registrasi Pasien")
-    print("2. Informasi Antrean")
+    print("2. Cek Nomor Antrean")
+    print("3. Menuju Klinik")
     print("9. Keluar")
 
 # Fungsi Untuk menampilkan daftar klinik
@@ -18,42 +19,41 @@ def menampilkan_daftar_klinik(server):
 
 # Fungsi untuk registrasi pasien
 def registrasi_pasien(server):
-    
-    print("\n")
-    
-    # Menampilkan daftar klinik
-    print("Daftar Klinik:")
+    print("\nDaftar Klinik:")
     daftar_klinik = menampilkan_daftar_klinik(server)
     
-    # Meminta input klinik yang dipilih
-    klinik_dipilih = input(f"Pilih klinik [1-{len(daftar_klinik)}]:")
+    klinik_dipilih = input(f"Pilih klinik [1-{len(daftar_klinik)}]: ")
     nama_klinik_dipilih = daftar_klinik[int(klinik_dipilih) - 1]
     
-    # Mengecek kesediaan tempat
     kesediaan_tempat = server.verifikasi_ketersediaan_tempat(nama_klinik_dipilih)
     if kesediaan_tempat == "Tempat penuh.":
         print("Antrean penuh")
         return
     
-    # Meminta informasi pribadi dari client
     nomor_rekam_medis = input("Masukkan nomor rekam medis: ")
     nama = input("Masukkan nama: ")
     tanggal_lahir = input("Masukkan tanggal lahir (YYYY-MM-DD): ")
     
-    # Registrasi pasien dan pemberian nomor antrean
     print(server.registrasi_pasien(nomor_rekam_medis, nama, tanggal_lahir, nama_klinik_dipilih))
 
-# Fungsi untuk mengecek antrian clien
+# Fungsi untuk mengecek nomor antrean
 def cek_nomor_antrean_client(server):
-    # Meminta input klinik dan nomor rekam medis
     daftar_klinik = menampilkan_daftar_klinik(server)
-    klinik_dipilih = input(f"Pilih klinik [1-{len(daftar_klinik)}]:")
+    klinik_dipilih = input(f"Pilih klinik [1-{len(daftar_klinik)}]: ")
     nomor_rekam_medis = input("Masukkan nomor rekam medis: ")
     nama_klinik_dipilih = daftar_klinik[int(klinik_dipilih) - 1]
     
-    # Mengecek antrean pasian pada klinik yang dipilih
     print(server.cek_nomor_antrean(nomor_rekam_medis, nama_klinik_dipilih))
-    print("_"*20)
+    print("_" * 20)
+
+# Fungsi untuk konfirmasi kehadiran
+def konfirmasi_kehadiran(server):
+    daftar_klinik = menampilkan_daftar_klinik(server)
+    klinik_dipilih = input(f"Pilih klinik [1-{len(daftar_klinik)}]: ")
+    nomor_rekam_medis = input("Masukkan nomor rekam medis: ")
+    nama_klinik_dipilih = daftar_klinik[int(klinik_dipilih) - 1]
+
+    print(server.konfirmasi_pasien(nomor_rekam_medis, nama_klinik_dipilih))
 
 if __name__ == "__main__":
     server = xmlrpc.client.ServerProxy("http://localhost:8000/")
@@ -66,6 +66,8 @@ if __name__ == "__main__":
             registrasi_pasien(server)
         elif pilihan == "2":
             cek_nomor_antrean_client(server)
+        elif pilihan == "3":
+            konfirmasi_kehadiran(server)
         elif pilihan == "9":
             print("Terima kasih. Keluar dari program.")
             break
